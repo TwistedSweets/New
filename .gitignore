@@ -1,0 +1,5 @@
+# Environment variables - NEVER push to GitHub
+.env
+
+# Node dependencies backend and frontend
+/node_modules
