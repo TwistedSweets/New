@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// El modelo User representa a los usuarios registrados en la aplicación. Cada usuario tiene un email y username únicos, una contraseña hasheada, y campos opcionales para su biografía y avatar. También guardamos las fechas de creación y actualización para cada usuario.
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  username     String   @unique
+  passwordHash String
+  bio          String?  @db.Text
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Tokens, mensajes y rooms
+  refreshTokens RefreshToken[]
+  sentMessages  Message[]
+  rooms         ChatRoomMember[]
+}
+
+// Para manejar la autenticación con tokens de refresco, guardamos los tokens en la base de datos con su fecha de expiración. Esto nos permite invalidar tokens si es necesario (por ejemplo, al cerrar sesión).
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique @db.VarChar(512)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+// Un chat room tiene un nombre único, una fecha de creación, y está relacionado con los mensajes enviados en ese room y los miembros que lo integran.
+model ChatRoom {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  messages Message[]
+  members  ChatRoomMember[]
+}
+
+// Cada mensaje tiene un contenido de texto, está relacionado con el usuario que lo envió y el chat room donde se envió. También guardamos la fecha de creación para mostrarla en la interfaz.
+model Message {
+  id        Int      @id @default(autoincrement())
+  content   String   @db.Text
+  senderId  Int
+  roomId    Int
+  sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  room      ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+// Para manejar la membresía de los usuarios en los chat rooms, tenemos una tabla intermedia ChatRoomMember. Esto nos permite saber quién es miembro de qué room, y también registrar cuándo se unieron. Además, al usar una tabla intermedia, podemos fácilmente agregar más campos relacionados con la membresía en el futuro (por ejemplo, roles de usuario dentro del room).
+model ChatRoomMember {
+  userId   Int
+  roomId   Int
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  room     ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  joinedAt DateTime @default(now())
+
+  @@id([userId, roomId])
+}
+
+//Migracion npx prisma migrate dev --name init migrate dev crea el archivo de migracion y actualiza la base de datos.
+//--name init primera migracion, pone todo en orden (solo usar si es primera migración).
