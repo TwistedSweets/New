@@ -29,6 +29,9 @@ app.use('/api/auth', authRoutes);
 // Rutas de usuarios.
 app.use('/api/users', userRoutes);
 
+//Ruta de upload de imagenes (avatar).
+app.use('/uploads', express.static('uploads')); // Sirve archivos estáticos desde la carpeta uploads
+
 // Chequeo de salud — testear en Postman: GET http://localhost:3001/api/health
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });

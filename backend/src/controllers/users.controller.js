@@ -1,4 +1,6 @@
 const prisma = require("../config/db");
+const multer = require("multer");
+const path = require("path");
 
 //Get usuario por ID (ejemplo de ruta protegida).
 const getUserById = async (req, res) => {
@@ -61,24 +63,28 @@ const updateProfile = async (req, res) => {
     res.json({ message: "Perfil actualizado correctamente", user: updatedUser });
 }
 
+//Multer corre Antes de la funcion  (como Middlware en la ruta).
 const uploadAvatar = async (req, res) => {
     const userId = parseInt(req.params.id);
-    if (isNaN(userId)) {
-        return res.status(400).json({ error: "ID de usuario inválido" });
-    }
 
-    // Solo el mismo usuario autenticado puede subir su avatar.
     if (req.user.id !== userId) {
-        return res.status(403).json({ error: "No tienes permiso para subir el avatar de este usuario" });
+        return res.status(403).json({ error: "No tienes permiso para actualizar este perfil" });
     }
 
     if (!req.file) {
-        return res.status(400).json({ error: "No se ha proporcionado ningún archivo" });
+        return res.status(400).json({ error: "No se ha subido ningún archivo" });
     }
 
-    // Aquí deberías subir el archivo a un servicio de almacenamiento (usamos multer)
-}
+    const avatarUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
 
+    const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: { avatarUrl },
+        select: { id: true, email: true, username: true, bio: true, avatarUrl: true }
+    });
+
+    res.json({ message: "Avatar actualizado correctamente", user: updatedUser });
+};
 
 module.exports = {
     getUserById,

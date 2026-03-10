@@ -4,3 +4,7 @@
 # Node dependencies backend and frontend
 node_modules/
 **/node_modules/
+
+# Uploaded images (avatars)
+uploads/
+
