@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -24,6 +25,9 @@ app.use(cookieParser());
 
 // Rutas de autenticación (registro, login, logout).
 app.use('/api/auth', authRoutes);
+
+// Rutas de usuarios.
+app.use('/api/users', userRoutes);
 
 // Chequeo de salud — testear en Postman: GET http://localhost:3001/api/health
 app.get('/api/health', (req, res) => {
