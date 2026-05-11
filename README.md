@@ -1,20 +1,6 @@
 ﻿# Web application school project
 
-> A full-stack professional web application built with **React**, **Node.js (JavaScript)**, **MySQL** (Azure Database for MySQL), and deployed on **Microsoft Azure**. Features include authentication, user profiles with photos, real-time chat, and a polished UI/UX.
-
-> **Your setup:** MySQL + MySQL Workbench already installed, VS Code, Postman. No Docker. JavaScript (not TypeScript).
-
----
-
-## Table of Contents
-
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Prerequisites & Tools to Install](#prerequisites--tools-to-install)
-- [Azure Services Overview](#azure-services-overview)
-- [Development Roadmap & Checklist](#development-roadmap--checklist)
-- [Security Checklist](#security-checklist)
-- [Getting Started](#getting-started)
+> A full-stack professional web application built with **React**, **Node.js (JavaScript)**, **MySQL** (Azure Database for MySQL), and deployed on **Microsoft Azure**. Features include authentication, user profiles with photos, real-time chat, and a polished UI/UX. NOT FINISHED.
 
 ---
 
