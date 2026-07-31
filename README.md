@@ -111,13 +111,8 @@ All the FRONTEND is for later; i'll use POSTMAN.
 
 ### Infrastructure
 - [ ] All secrets stored in **Azure Key Vault**, never in code or committed `.env` files
-- [ ] `.env` file added to `.gitignore` immediately
+- [x] `.env` file added to `.gitignore` immediately
 - [ ] Azure MySQL: firewall rules — only allow App Service IP
 - [ ] Azure Blob Storage: container is private; serve photos via signed URLs or App Service proxy
 - [ ] Enable **Azure Defender for MySQL** for threat detection
-
-### Code Hygiene
-- [ ] `npm audit` run before every deployment
-- [ ] Dependabot enabled on GitHub for automated dependency updates
-- [ ] No `console.log` with sensitive data in production
 
